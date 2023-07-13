@@ -1,0 +1,45 @@
+name: Test ROS OCP with latest Kruize remote monitoring
+on:
+  workflow_dispatch:
+    inputs:
+      IMAGE_NAME:
+        description: 'Kruize image'
+        required: false
+        default: 'quay.io/kruize/autotune_operator'
+      IMAGE_TAG:
+        description: 'Kruize image tag'
+        required: false
+        default: '0.0.16_rm'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Create pull-request
+        run: |
+
+          echo "IMAGE TAG = $IMAGE_TAG  IMAGE_NAME = $IMAGE_NAME"
+
+          BRANCH_NAME="kruize_rm"
+
+          # Setup the committers identity.
+          git config user.email "csubrama@redhat.com"
+          git config user.name "Chandrakala Subramanyam"
+
+          # Create a new feature branch for the changes.
+          git checkout -b $BRANCH_NAME
+
+          # Update the script files to the latest version.
+          sed -i "s|\${KRUIZE_IMAGE}:\${KRUIZE_IMAGE_TAG}|${IMAGE_NAME}:${IMAGE_TAG}|g" clowdapp.yaml
+
+          # Commit the changes and push the feature branch to origin
+          git add .
+          git commit -m "Updated Kruize image"
+          git push origin $BRANCH_NAME
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          title: '[Do not merge] - PR to trigger PR check tests on EE against ROS OCP with Kruize RM image specified'
