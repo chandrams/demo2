@@ -44,4 +44,5 @@ jobs:
       - name: Create pull request
         uses: peter-evans/create-pull-request@v4
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           title: '[Do not merge] - PR to trigger PR check tests on EE against ROS OCP with Kruize RM image specified'
