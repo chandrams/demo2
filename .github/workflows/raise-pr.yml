@@ -28,24 +28,18 @@ jobs:
           echo "::set-output name=changed::$(cmp --silent ./demo2/commitsha ./demo/commitsha && echo 'false' || echo 'true')"
           echo "***** changed = ${{ steps.compare_files.outputs.changed }}"
           
-      - name: Extract content from target file
-        id: extract_content
-        run: |
-          content=$(cat ./demo/commitsha)
-          echo "::set-output name=content::${content//$'\n'/\\n}"
-
       - name: Replace string in current file       
         id: replace_string
-        if: steps.extract_content.outputs.changed == 'true'
+        if: steps.compare_files.outputs.changed == 'true'
         run: |          
             IMAGE_NAME="quay.io/chandra25ms/autotune"
             IMAGE_TAG=${{ steps.extract_content.outputs.content }}
-            
+            content=$(cat ./demo/commitsha)
+            echo "::set-output name=content::${content//$'\n'/\\n}"
             sed -i "s|\${KRUIZE_IMAGE}:\${KRUIZE_IMAGE_TAG}|${IMAGE_NAME}:${IMAGE_TAG}|g" ./demo2/clowdapp.yaml
             echo "Updated"
             echo "::set-output name=updated::'true'"
-            echo "********** Updated = ${{ steps.replace_string.outputs.updated }}"
-          
+            echo "********** Updated = ${{ steps.replace_string.outputs.updated }}"          
 
       - name: Commit and Push Changes
         if: steps.replace_string.outputs.updated == 'true'
