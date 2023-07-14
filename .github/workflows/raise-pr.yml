@@ -52,10 +52,10 @@ jobs:
       - name: Commit and Push Changes
         run: |
             if ${{ steps.replace_string.outputs.updated }} == 'true'; then
-              
+              cd demo2
               git config user.name "Chandra"
               git config user.email "csubrama@redhat.com"
-              git add ./demo2/clowdapp.yaml
+              git add clowdapp.yaml
               git commit -m "Replace image and image tag"
               git push origin HEAD
             else
