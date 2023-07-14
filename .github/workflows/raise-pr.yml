@@ -30,7 +30,7 @@ jobs:
       - name: Extract content from target file
         id: extract_content
         run: |
-          content=$(./demo/commitsha)
+          content=$(cat ./demo/commitsha)
           echo "::set-output name=content::${content//$'\n'/\\n}"
 
       - name: Replace string in current file
