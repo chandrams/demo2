@@ -11,12 +11,15 @@ jobs:
     steps:
       - name: Checkout current repository
         uses: actions/checkout@v3
+        with:
+          repository: chandrams/demo2
+          path: demo2
 
       - name: Checkout target repository
         uses: actions/checkout@v3
         with:
           repository: chandrams/demo
-          ref: main
+          path: demo
 
       - name: Compare file contents
         id: compare_files
