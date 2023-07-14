@@ -1,0 +1,72 @@
+name: Check and Raise Pull Request
+
+on:
+  workflow_dispatch:
+  
+    
+jobs:
+  check_changes_and_raise_pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v2
+
+      - name: Checkout target repository
+        uses: actions/checkout@v2
+        with:
+          repository: chandrams/demo
+          ref: main
+
+      - name: Compare file contents
+        id: compare_files
+        run: |
+          echo "::set-output name=changed::$(cmp --silent commitsha demo/commitsha && echo 'false' || echo 'true')"
+          
+      - name: Extract content from target file
+        id: extract_content
+        run: |
+          content=$(demo/commitsha)
+          echo "::set-output name=content::${content//$'\n'/\\n}"
+
+      - name: Replace string in current file
+        id: replace_string
+        run: |
+          if ${{ steps.compare_files.outputs.changed }} == true; then
+            IMAGE_NAME="quay.io/chandra25ms/autotune"
+            IMAGE_TAG=${{ steps.extract_content.outputs.content }}
+            sed -i "s|\${KRUIZE_IMAGE}:\${KRUIZE_IMAGE_TAG}|${IMAGE_NAME}:${IMAGE_TAG}|g" clowdapp.yaml
+            echo "Updated"
+            echo "::set-output name=updated::'true'"
+          else
+            echo "No change so no need to update"
+            echo "::set-output name=updated::'false'"
+          fi
+
+
+      - name: Commit and Push Changes
+        run: |
+            if ${{ steps.replace_string.outputs.updated }} == 'true';
+              git config user.name "Chandra"
+              git config user.email "csubrama@redhat.com"
+              git add clowdapp.yaml
+              git commit -m "Replace image and image tag"
+              git push origin HEAD
+            else
+              echo "No change so no need to update"
+            fi
+
+       
+      - name: Create Pull Request
+        id: create_pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'Update kruize image'
+          branch: 'update-kruize-image'
+          title: 'Update kruize image'
+          body: 'This pull request updates the kruize image with the latest'
+          path: 'clowdapp.yaml'       
+
+      - name: PR Status
+        run: echo "Pull Request Number - ${{ steps.create_pr.outputs.pull-request-number }}"
