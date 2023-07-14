@@ -21,14 +21,13 @@ jobs:
       - name: Compare file contents
         id: compare_files
         run: |
-          ls
-          ls -l demo
-          echo "::set-output name=changed::$(cmp --silent commitsha demo/commitsha && echo 'false' || echo 'true')"
+          ls ${GITHUB_WORKSPACE}
+          echo "::set-output name=changed::$(cmp --silent ${GITHUB_WORKSPACE}/demo2/commitsha ${GITHUB_WORKSPACE}/demo/commitsha && echo 'false' || echo 'true')"
           
       - name: Extract content from target file
         id: extract_content
         run: |
-          content=$(demo/commitsha)
+          content=$(${GITHUB_WORKSPACE}/demo/commitsha)
           echo "::set-output name=content::${content//$'\n'/\\n}"
 
       - name: Replace string in current file
@@ -37,6 +36,8 @@ jobs:
           if ${{ steps.compare_files.outputs.changed }} == true; then
             IMAGE_NAME="quay.io/chandra25ms/autotune"
             IMAGE_TAG=${{ steps.extract_content.outputs.content }}
+            
+            cd ${GITHUB_WORKSPACE}/demo2
             sed -i "s|\${KRUIZE_IMAGE}:\${KRUIZE_IMAGE_TAG}|${IMAGE_NAME}:${IMAGE_TAG}|g" clowdapp.yaml
             echo "Updated"
             echo "::set-output name=updated::'true'"
@@ -49,6 +50,7 @@ jobs:
       - name: Commit and Push Changes
         run: |
             if ${{ steps.replace_string.outputs.updated }} == 'true';
+              cd ${GITHUB_WORKSPACE}/demo2
               git config user.name "Chandra"
               git config user.email "csubrama@redhat.com"
               git add clowdapp.yaml
@@ -68,7 +70,7 @@ jobs:
           branch: 'update-kruize-image'
           title: 'Update kruize image'
           body: 'This pull request updates the kruize image with the latest'
-          path: 'clowdapp.yaml'       
+          path: '${GITHUB_WORKSPACE}/demo2/clowdapp.yaml'       
 
       - name: PR Status
         run: echo "Pull Request Number - ${{ steps.create_pr.outputs.pull-request-number }}"
