@@ -25,12 +25,12 @@ jobs:
         id: compare_files
         run: |
           ls ${GITHUB_WORKSPACE}
-          echo "::set-output name=changed::$(cmp --silent ${GITHUB_WORKSPACE}/demo2/commitsha ${GITHUB_WORKSPACE}/demo/commitsha && echo 'false' || echo 'true')"
+          echo "::set-output name=changed::$(cmp --silent ./demo2/commitsha ./demo/commitsha && echo 'false' || echo 'true')"
           
       - name: Extract content from target file
         id: extract_content
         run: |
-          content=$(${GITHUB_WORKSPACE}/demo/commitsha)
+          content=$(./demo/commitsha)
           echo "::set-output name=content::${content//$'\n'/\\n}"
 
       - name: Replace string in current file
@@ -40,8 +40,7 @@ jobs:
             IMAGE_NAME="quay.io/chandra25ms/autotune"
             IMAGE_TAG=${{ steps.extract_content.outputs.content }}
             
-            cd ${GITHUB_WORKSPACE}/demo2
-            sed -i "s|\${KRUIZE_IMAGE}:\${KRUIZE_IMAGE_TAG}|${IMAGE_NAME}:${IMAGE_TAG}|g" clowdapp.yaml
+            sed -i "s|\${KRUIZE_IMAGE}:\${KRUIZE_IMAGE_TAG}|${IMAGE_NAME}:${IMAGE_TAG}|g" ./demo2/clowdapp.yaml
             echo "Updated"
             echo "::set-output name=updated::'true'"
           else
@@ -53,10 +52,10 @@ jobs:
       - name: Commit and Push Changes
         run: |
             if ${{ steps.replace_string.outputs.updated }} == 'true';
-              cd ${GITHUB_WORKSPACE}/demo2
+              
               git config user.name "Chandra"
               git config user.email "csubrama@redhat.com"
-              git add clowdapp.yaml
+              git add ./demo2/clowdapp.yaml
               git commit -m "Replace image and image tag"
               git push origin HEAD
             else
@@ -73,7 +72,7 @@ jobs:
           branch: 'update-kruize-image'
           title: 'Update kruize image'
           body: 'This pull request updates the kruize image with the latest'
-          path: '${GITHUB_WORKSPACE}/demo2/clowdapp.yaml'       
+          path: './demo2/clowdapp.yaml'       
 
       - name: PR Status
         run: echo "Pull Request Number - ${{ steps.create_pr.outputs.pull-request-number }}"
