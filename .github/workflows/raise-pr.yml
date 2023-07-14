@@ -53,11 +53,13 @@ jobs:
         run: |
             if ${{ steps.replace_string.outputs.updated }} == 'true'; then
               cd demo2
+              
               git config user.name "Chandra"
               git config user.email "csubrama@redhat.com"
+              git checkout -b update-kruize-image
               git add clowdapp.yaml
               git commit -m "Replace image and image tag"
-              git push origin HEAD
+              git push origin update-kruize-image
             else
               echo "No change so no need to update"
             fi
