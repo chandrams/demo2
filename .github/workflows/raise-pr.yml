@@ -45,7 +45,7 @@ jobs:
             git checkout -b update-kruize-image
             git add clowdapp.yaml
             git commit -m "Replace image and image tag"
-            git remote set-url origin https://${{ secrets.MYTOKEN }}@github.com/chandrams/demo2.git 
+            git remote set-url origin https://chandrams:${{ secrets.MYTOKEN }}@github.com/chandrams/demo2.git 
             git push origin update-kruize-image
           
        
