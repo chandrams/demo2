@@ -28,8 +28,8 @@ jobs:
           echo "::set-output name=changed::$(cmp --silent ./demo2/commitsha ./demo/commitsha && echo 'false' || echo 'true')"
           echo "***** changed = ${{ steps.compare_files.outputs.changed }}"
           
-      - name: Replace string in current file       
-        id: replace_string
+      - name: Commit and Push Changes       
+        
         if: steps.compare_files.outputs.changed == 'true'
         run: |          
             IMAGE_NAME="quay.io/chandra25ms/autotune"
@@ -38,22 +38,15 @@ jobs:
             echo "::set-output name=content::${content//$'\n'/\\n}"
             sed -i "s|\${KRUIZE_IMAGE}:\${KRUIZE_IMAGE_TAG}|${IMAGE_NAME}:${IMAGE_TAG}|g" ./demo2/clowdapp.yaml
             echo "Updated"
-            echo "::set-output name=updated::'true'"
-            echo "********** Updated = ${{ steps.replace_string.outputs.updated }}"          
-
-      - name: Commit and Push Changes
-        if: steps.replace_string.outputs.updated == 'true'
-        run: |
-           
-              cd demo2
-              
-              git config user.name "Chandra"
-              git config user.email "csubrama@redhat.com"
-              git checkout -b update-kruize-image
-              git add clowdapp.yaml
-              git commit -m "Replace image and image tag"
-              git remote set-url origin https://${{ secrets.MYTOKEN }}@github.com/chandrams/demo2.git 
-              git push origin update-kruize-image
+            cd demo2
+             
+            git config user.name "Chandra"
+            git config user.email "csubrama@redhat.com"
+            git checkout -b update-kruize-image
+            git add clowdapp.yaml
+            git commit -m "Replace image and image tag"
+            git remote set-url origin https://${{ secrets.MYTOKEN }}@github.com/chandrams/demo2.git 
+            git push origin update-kruize-image
           
        
       - name: Create Pull Request
