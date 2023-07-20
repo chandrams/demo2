@@ -43,7 +43,7 @@ jobs:
           # Update the kruize image tag
           new_tag=$(cat ./autotune-builder/.commitsha)
           echo "new_tag = $new_tag"
-        
+          new_tag=180a6ff
           sed -i "s/190a6cc/$new_tag/g" ./ros-ocp-backend/kruize-clowdapp.yaml
           cat ./ros-ocp-backend/kruize-clowdapp.yaml
           rm ./ros-ocp-backend/.commitsha 
