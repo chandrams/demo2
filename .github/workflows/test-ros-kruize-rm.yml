@@ -44,7 +44,7 @@ jobs:
           new_tag=$(cat ./autotune-builder/.commitsha)
           echo "new_tag = $new_tag"
         
-          sed -i "s/190a6cc/$new_tag|g" ./ros-ocp-backend/kruize-clowdapp.yaml
+          sed -i "s/190a6cc/$new_tag/g" ./ros-ocp-backend/kruize-clowdapp.yaml
 
           cd ros-ocp-backend
 
