@@ -23,7 +23,7 @@ def create_commitsha(yaml_file):
             print(data["value"])
 
     with open('/tmp/.commitsha', 'w') as f:
-        f.write(commit_tag)
+        f.write(commit_tag.strip())
         f.close()
 
 if __name__ == "__main__":
