@@ -1,0 +1,17 @@
+name: Install yq and parse
+
+on:
+  workflow_dispatch:
+  
+    
+jobs:
+  check_changes_and_raise_pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v3
+      - name: Install yq and parse yaml
+        run: |
+          sudo apt-get update
+          suod apt-get install yq
