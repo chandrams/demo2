@@ -34,8 +34,8 @@ jobs:
           #
           
           current_image_tag="180a6ff"
-          # echo "$current_image_tag" > ./ros-ocp-backend/.commitsha
-          echo "190a6cc" > ./ros-ocp-backend/.commitsha
+          echo "$current_image_tag" > ./ros-ocp-backend/.commitsha
+          
           cat ./ros-ocp-backend/.commitsha
           #echo "::set-output name=changed::$(cmp --silent ./ros-ocp-backend/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')"
           echo "changed=$(cmp --silent ./ros-ocp-backend/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')" >> $GITHUB_OUTPUT
