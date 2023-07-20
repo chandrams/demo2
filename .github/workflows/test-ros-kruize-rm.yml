@@ -1,4 +1,4 @@
-name: Test ROS OCP with latest Kruize remote monitoring
+name: Test ROS OCP with Kruize remote monitoring
 
 on:
   pull_request:
