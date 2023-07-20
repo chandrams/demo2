@@ -52,10 +52,9 @@ jobs:
           # Setup the committers identity.
           git config user.email "csubrama@redhat.com"
           git config user.name "Chandrakala Subramanyam"
-          git diff
+                 
           git status
           
-          git status
           # Commit the changes and push the feature branch to origin
           git add kruize-clowdapp.yaml
           git commit -m "Updated Kruize image tag"
@@ -63,4 +62,4 @@ jobs:
       - name: Create pull request
         uses: peter-evans/create-pull-request@v4
         with:
-          title: '[Do not merge] - PR to trigger tests on EE against ROS OCP with Kruize RM image specified'
+          title: '[Do not merge] - PR to trigger tests on EE against ROS OCP with latest Kruize RM image'
