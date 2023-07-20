@@ -60,6 +60,7 @@ jobs:
           git commit -m "Updated Kruize image tag"
 
       - name: Create pull request
-        uses: peter-evans/create-pull-request@v4
+        if: steps.compare_files.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v5
         with:
           title: '[Do not merge] - PR to trigger tests on EE against ROS OCP with latest Kruize RM image'
