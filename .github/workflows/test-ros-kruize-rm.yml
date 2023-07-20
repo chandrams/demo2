@@ -34,6 +34,8 @@ jobs:
           #echo "::set-output name=changed::$(cmp --silent ./ros-ocp-backend/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')"
           echo "changed=$(cmp --silent /tmp/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')" >> $GITHUB_OUTPUT
           
+          echo "changed='false'" >> $GITHUB_OUTPUT
+          
       - name: Print changed variable
         run: |
          echo "changed = ${{ steps.compare_files.outputs.changed }}"
