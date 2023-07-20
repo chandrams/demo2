@@ -1,0 +1,62 @@
+name: Test ROS OCP with latest Kruize remote monitoring
+
+on:
+  pull_request:
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          repository: RedHatInsights/ros-ocp-backend
+          path: ros-ocp-backend 
+
+      - name: Checkout target repository
+        uses: actions/checkout@v3
+        with:
+          repository: RedHatInsights/autotune-builder
+          path: autotune-builder
+
+      - name: Compare commitsha
+        id: compare_files
+        run: |
+          ls
+          #sudo apt-get install yq
+          #yaml_file="./ros-ocp-backend/kruize-clowdapp.yaml"
+          #key="KRUIZE_IMAGE_TAG"
+          #value=$(yq eval ".$key" "$yaml_file")
+          #echo "value = $value"
+          #
+          echo "180a6ff" > ./ros-ocp-backend/.commitsha
+          cat ./ros-ocp-backend/.commitsha
+          echo "::set-output name=changed::$(cmp --silent ./ros-ocp-backend/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')"
+
+      - name: Create pull-request
+        if: steps.compare_files.outputs.changed == 'true'
+        run: |
+          echo "changed = ${{ steps.compare_files.outputs.changed }}"
+
+          # Update the kruize image tag
+          new_tag=$(cat ./autotune-builder/.commitsha)
+          echo "new_tag = $new_tag"
+        
+          sed -i "s/190a6cc/$new_tag|g" ./ros-ocp-backend/kruize-clowdapp.yaml
+
+          cd ros-ocp-backend
+
+          # Setup the committers identity.
+          git config user.email "csubrama@redhat.com"
+          git config user.name "Chandrakala Subramanyam"
+          
+          # Commit the changes and push the feature branch to origin
+          git add kruize-clowdapp.yaml
+          git commit -m "Updated Kruize image tag"
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          title: '[Do not merge] - PR to trigger tests on EE against ROS OCP with Kruize RM image specified'
