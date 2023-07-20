@@ -38,16 +38,16 @@ jobs:
           echo "190a6cc" > ./ros-ocp-backend/.commitsha
           cat ./ros-ocp-backend/.commitsha
           #echo "::set-output name=changed::$(cmp --silent ./ros-ocp-backend/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')"
-          echo "changed=$(cmp --silent ./ros-ocp-backend/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')" >> $GITHUB_ENV
+          echo "changed=$(cmp --silent ./ros-ocp-backend/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')" >> $GITHUB_OUTPUT
           
       - name: Print changed variable
         run: |
-         echo "changed = ${{ env.changed }}"
+         echo "changed = ${{ steps.compare_files.outputs.changed }}"
          
       - name: Update the kruize image tag in kruize clowdapp yaml
-        if: ${{ env.changed }} == 'true'
+        if: steps.compare_files.outputs.changed == 'true'
         run: |
-          echo "changed = ${{ env.changed }}"
+          echo "changed = ${{ steps.compare_files.outputs.changed }}"
 
           # Update the kruize image tag
           new_tag=$(cat ./autotune-builder/.commitsha)
@@ -69,7 +69,7 @@ jobs:
           git commit -m "Updated Kruize image tag"
 
       - name: Create pull request
-        if: ${{ env.changed }} == 'true'
+        if: steps.compare_files.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
           title: '[Do not merge] - PR to trigger tests on EE against ROS OCP with latest Kruize RM image'
