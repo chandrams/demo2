@@ -26,19 +26,11 @@ jobs:
         run: |
           ls
           # Add logic to fetch the current kruize image tag value
-          #sudo apt-get install yq
-          #yaml_file="./ros-ocp-backend/kruize-clowdapp.yaml"
-          #key="KRUIZE_IMAGE_TAG"
-          #value=$(yq eval ".$key" "$yaml_file")
-          #echo "value = $value"
-          #
+          python3 get_kruize_image_tag ./ros-ocp-backend/kruize-clowdapp.yaml
+          cat /tmp/.commitsha
           
-          current_image_tag="180a6ff"
-          echo "$current_image_tag" > ./ros-ocp-backend/.commitsha
-          
-          cat ./ros-ocp-backend/.commitsha
           #echo "::set-output name=changed::$(cmp --silent ./ros-ocp-backend/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')"
-          echo "changed=$(cmp --silent ./ros-ocp-backend/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')" >> $GITHUB_OUTPUT
+          echo "changed=$(cmp --silent /tmp/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')" >> $GITHUB_OUTPUT
           
       - name: Print changed variable
         run: |
@@ -50,12 +42,14 @@ jobs:
           echo "changed = ${{ steps.compare_files.outputs.changed }}"
 
           # Update the kruize image tag
+          current_tag=$(cat /tmp/.commitsha)
           new_tag=$(cat ./autotune-builder/.commitsha)
+          echo "current_tag = $current_tag"
           echo "new_tag = $new_tag"
           new_tag=180a6ff
-          sed -i "s/190a6cc/$new_tag/g" ./ros-ocp-backend/kruize-clowdapp.yaml
+          sed -i "s/$current_tag/$new_tag/g" ./ros-ocp-backend/kruize-clowdapp.yaml
           cat ./ros-ocp-backend/kruize-clowdapp.yaml
-          rm ./ros-ocp-backend/.commitsha 
+          
           cd ros-ocp-backend
 
           # Setup the committers identity.
