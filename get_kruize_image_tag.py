@@ -22,7 +22,7 @@ def create_commitsha(yaml_file):
             commit_tag=data["value"]
             print(data["value"])
 
-    with open('/tmp/.commitsha', 'r+') as f:
+    with open('/tmp/.commitsha', 'w') as f:
         f.write(commit_tag.strip())
         f.close()
 
