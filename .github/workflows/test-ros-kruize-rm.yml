@@ -45,6 +45,7 @@ jobs:
           echo "new_tag = $new_tag"
         
           sed -i "s/190a6cc/$new_tag/g" ./ros-ocp-backend/kruize-clowdapp.yaml
+          cat ./ros-ocp-backend/kruize-clowdapp.yaml
           rm ./ros-ocp-backend/.commitsha 
           cd ros-ocp-backend
 
