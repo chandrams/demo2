@@ -28,7 +28,7 @@ jobs:
         run: |
           ls
           # Add logic to fetch the current kruize image tag value
-          python3 get_kruize_image_tag ./ros-ocp-backend/kruize-clowdapp.yaml
+          python3 get_kruize_image_tag.py ./ros-ocp-backend/kruize-clowdapp.yaml
           cat /tmp/.commitsha
           
           #echo "::set-output name=changed::$(cmp --silent ./ros-ocp-backend/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')"
