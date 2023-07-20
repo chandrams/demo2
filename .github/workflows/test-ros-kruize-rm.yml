@@ -45,13 +45,16 @@ jobs:
           echo "new_tag = $new_tag"
         
           sed -i "s/190a6cc/$new_tag/g" ./ros-ocp-backend/kruize-clowdapp.yaml
-
+            
           cd ros-ocp-backend
 
           # Setup the committers identity.
           git config user.email "csubrama@redhat.com"
           git config user.name "Chandrakala Subramanyam"
-          
+          git diff
+          git status
+          rm .commitsha
+          git status
           # Commit the changes and push the feature branch to origin
           git add kruize-clowdapp.yaml
           git commit -m "Updated Kruize image tag"
