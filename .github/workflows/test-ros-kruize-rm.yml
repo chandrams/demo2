@@ -25,13 +25,16 @@ jobs:
         id: compare_files
         run: |
           ls
+          # Add logic to fetch the current kruize image tag value
           #sudo apt-get install yq
           #yaml_file="./ros-ocp-backend/kruize-clowdapp.yaml"
           #key="KRUIZE_IMAGE_TAG"
           #value=$(yq eval ".$key" "$yaml_file")
           #echo "value = $value"
           #
-          # echo "180a6ff" > ./ros-ocp-backend/.commitsha
+          
+          current_image_tag="180a6ff"
+          # echo "$current_image_tag" > ./ros-ocp-backend/.commitsha
           echo "190a6cc" > ./ros-ocp-backend/.commitsha
           cat ./ros-ocp-backend/.commitsha
           #echo "::set-output name=changed::$(cmp --silent ./ros-ocp-backend/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')"
