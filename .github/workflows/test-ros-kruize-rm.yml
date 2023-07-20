@@ -35,7 +35,7 @@ jobs:
           cat ./ros-ocp-backend/.commitsha
           echo "::set-output name=changed::$(cmp --silent ./ros-ocp-backend/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')"
 
-      - name: Create pull-request
+      - name: Update the kruize image tag in kruize clowdapp yaml
         if: steps.compare_files.outputs.changed == 'true'
         run: |
           echo "changed = ${{ steps.compare_files.outputs.changed }}"
