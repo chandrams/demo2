@@ -37,7 +37,10 @@ jobs:
           #echo "::set-output name=changed::$(cmp --silent ./ros-ocp-backend/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')"
           echo "changed=$(cmp --silent ./ros-ocp-backend/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')" >> $GITHUB_ENV
           
-
+      - name: Print changed variable
+        run: |
+         echo "changed = ${{ env.changed }}"
+         
       - name: Update the kruize image tag in kruize clowdapp yaml
         if: ${{ env.changed }} == 'true'
         run: |
