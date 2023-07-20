@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
         with:
           repository: RedHatInsights/ros-ocp-backend
           path: ros-ocp-backend 
