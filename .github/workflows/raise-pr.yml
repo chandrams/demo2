@@ -36,8 +36,7 @@ jobs:
             echo "::set-output name=content::${content//$'\n'/\\n}"
             sed -i "s|\${KRUIZE_IMAGE}:\${KRUIZE_IMAGE_TAG}|${IMAGE_NAME}:${IMAGE_TAG}|g" ./clowdapp.yaml
             echo "Updated"
-            cd demo2
-             
+           
             git config user.name "Chandra"
             git config user.email "csubrama@redhat.com"
             git checkout -b update-kruize-image
