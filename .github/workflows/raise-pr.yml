@@ -53,7 +53,7 @@ jobs:
         id: create_pr
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.MYTOKEN }}
           commit-message: 'Update kruize image'
           branch: 'update-kruize-image'
           title: 'Update kruize image'
