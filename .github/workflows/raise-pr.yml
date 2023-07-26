@@ -45,9 +45,7 @@ jobs:
             git checkout -b update-kruize-image
             git add clowdapp.yaml
             git commit -m "Replace image and image tag"
-            git remote set-url origin https://chandrams:${{ secrets.MYTOKEN }}@github.com/chandrams/demo2.git 
-            git push origin update-kruize-image
-          
+         
        
       - name: Create Pull Request
         id: create_pr
@@ -60,5 +58,4 @@ jobs:
           body: 'This pull request updates the kruize image with the latest'
           path: './demo2/clowdapp.yaml'       
 
-      - name: PR Status
-        run: echo "Pull Request Number - ${{ steps.create_pr.outputs.pull-request-number }}"
+   
