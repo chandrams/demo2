@@ -11,9 +11,7 @@ jobs:
     steps:
       - name: Checkout current repository
         uses: actions/checkout@v3
-        with:
-          repository: chandrams/demo2
-          path: demo2
+     
 
       - name: Checkout target repository
         uses: actions/checkout@v3
@@ -25,7 +23,7 @@ jobs:
         id: compare_files
         run: |
           ls ${GITHUB_WORKSPACE}
-          echo "::set-output name=changed::$(cmp --silent ./demo2/commitsha ./demo/commitsha && echo 'false' || echo 'true')"
+          echo "::set-output name=changed::$(cmp --silent ./commitsha ./demo/commitsha && echo 'false' || echo 'true')"
           echo "***** changed = ${{ steps.compare_files.outputs.changed }}"
           
       - name: Commit and Push Changes       
@@ -36,7 +34,7 @@ jobs:
             IMAGE_TAG=${{ steps.extract_content.outputs.content }}
             content=$(cat ./demo/commitsha)
             echo "::set-output name=content::${content//$'\n'/\\n}"
-            sed -i "s|\${KRUIZE_IMAGE}:\${KRUIZE_IMAGE_TAG}|${IMAGE_NAME}:${IMAGE_TAG}|g" ./demo2/clowdapp.yaml
+            sed -i "s|\${KRUIZE_IMAGE}:\${KRUIZE_IMAGE_TAG}|${IMAGE_NAME}:${IMAGE_TAG}|g" ./clowdapp.yaml
             echo "Updated"
             cd demo2
              
@@ -56,6 +54,5 @@ jobs:
           branch: 'update-kruize-image'
           title: 'Update kruize image'
           body: 'This pull request updates the kruize image with the latest'
-          path: './demo2/clowdapp.yaml'       
-
+          
    
