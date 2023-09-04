@@ -11,7 +11,14 @@ jobs:
     steps:
       - name: Checkout current repository
         uses: actions/checkout@v3
-    
+        
+      - uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+ 
           
       - name: Commit and Push Changes       
         
@@ -31,7 +38,7 @@ jobs:
         id: create_pr
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.MYTOKEN }}
+          token: ${{ secrets.PAT }}
           commit-message: 'Update kruize image'
           title: 'Update kruize image'
           body: 'This pull request updates the kruize image with the latest'
