@@ -64,8 +64,10 @@ jobs:
           git status
 
           # Commit the changes and push the feature branch to origin
+          git checkout -b update_image
           git add kruize-clowdapp.yaml
           git commit -m "Updated Kruize image tag"
+          git push origin update_image
 
       - name: Create pull request
         if: steps.compare_files.outputs.changed == 'true'
