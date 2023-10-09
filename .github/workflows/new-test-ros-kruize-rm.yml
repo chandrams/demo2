@@ -9,6 +9,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          repository: RedHatInsights/ros-ocp-backend
+          path: ros-ocp-backend
+
 
       - name: Checkout autotune-builder repository
         uses: actions/checkout@v3
@@ -20,7 +26,7 @@ jobs:
         id: compare_files
         run: |
           # Add logic to fetch the current kruize image tag value
-          python3 ./scripts/get_kruize_image_tag.py ./kruize-clowdapp.yaml
+          python3 ./scripts/get_kruize_image_tag.py ./ros-ocp-backend/kruize-clowdapp.yaml
           cat /tmp/.commitsha
           
           echo "changed=$(cmp --silent /tmp/.commitsha ./autotune-builder/.commitsha && echo 'false' || echo 'true')" >> $GITHUB_OUTPUT
@@ -45,12 +51,13 @@ jobs:
 
           # Added this for testing
           new_tag=8dd52f3
-          sed -i "s/$current_tag/$new_tag/g" ./kruize-clowdapp.yaml
-          cat ./kruize-clowdapp.yaml
+          sed -i "s/$current_tag/$new_tag/g" ./ros-ocp-backend/kruize-clowdapp.yaml
+          cat ./ros-ocp-backend/kruize-clowdapp.yaml
 
           rm -rf autotune-builder
 
           # Setup the committers identity.
+          cd ros-ocp-backend
           git config user.name 'Update-a-Bot'
           git config user.email 'insights@redhat.com'
 
