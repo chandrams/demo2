@@ -64,6 +64,5 @@ jobs:
         if: steps.compare_files.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.PULLTOKEN }}
           title: '[Do not merge] - PR to trigger tests on EE against ROS OCP with latest Kruize RM image'
           base: main
