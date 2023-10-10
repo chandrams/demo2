@@ -66,11 +66,12 @@ jobs:
           git checkout -b update_image
           git add kruize-clowdapp.yaml
           git commit -m "Updated Kruize image tag"
-          git push origin update_image
+      
 
       - name: Create pull request
         if: steps.compare_files.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
+          token: ${{ secrets.KRUIZE_BOT_PAT }}
           title: '[Do not merge] - PR to trigger tests on EE against ROS OCP with latest Kruize RM image'
           base: main
