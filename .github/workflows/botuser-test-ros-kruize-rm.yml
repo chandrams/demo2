@@ -66,8 +66,7 @@ jobs:
           git checkout -b update_image
           git add kruize-clowdapp.yaml
           git commit -m "Updated Kruize image tag"
-          git push origin update_image
-
+          
       - uses: tibdex/github-app-token@v1
         id: generate-token
         with:
