@@ -14,6 +14,7 @@ jobs:
         with:
           repository: RedHatInsights/ros-ocp-backend
           path: ros-ocp-backend
+          token: ${{ secrets.KRUIZE_BOT_PAT }}
           
       - name: Checkout autotune-builder repository
         uses: actions/checkout@v3
@@ -66,7 +67,7 @@ jobs:
           git checkout -b update_image
           git add kruize-clowdapp.yaml
           git commit -m "Updated Kruize image tag"
-      
+          git push origin update_image
 
       - name: Create pull request
         if: steps.compare_files.outputs.changed == 'true'
