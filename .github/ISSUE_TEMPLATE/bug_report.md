@@ -1,24 +1,28 @@
-## What is being tested?
+---
+name: Bug report
+about: Create a report to help us improve
+title: " "
+labels: bug
+assignees: ''
+---
 
-Describe the scenario being tested
+**Describe the bug**
+A clear and concise description of the bug
 
-## What is the current behavior?
+**To Reproduce**
+Steps to reproduce the behavior:
+1. 
+2.
 
-Provide details of the current behaviour
+**Expected behavior**
+A clear and concise description of the expected behavior
 
-### Please provide the steps to reproduce
+**Screenshots**
+Add screenshots to help explain your problem if applicable
 
-Add steps to reproduce the issue here 
+**Kubernetes cluster (please complete the following information):**
+- Cluster [e.g. minikube, openshift, kind]
+- Version
 
-### Details of the test environment:
-
-Kruize release:
-Kubernetes cluster:
-
-## What is the expected behavior?
-
-Describe the expected behavior
-
-## Additional information:
-
-Add any relevant links, screenshots
+**Additional context**
+Add any other context about the problem here.
