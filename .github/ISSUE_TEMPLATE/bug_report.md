@@ -9,20 +9,20 @@ assignees: ''
 **Describe the bug**
 A clear and concise description of the bug
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. 
-2.
+**How to reproduce it**
 
 **Expected behavior**
 A clear and concise description of the expected behavior
 
+**Relevant logs**
+
 **Screenshots**
 Add screenshots to help explain your problem if applicable
 
-**Kubernetes cluster (please complete the following information):**
-- Cluster [e.g. minikube, openshift, kind]
+**Environment:**
+- Kubernetes Cluster [e.g. minikube, openshift, kind]
 - Version
+- OS
 
 **Additional context**
-Add any other context about the problem here.
+Add any other context about the problem here
